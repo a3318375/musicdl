@@ -1256,6 +1256,31 @@ JioSaavnMusicClient works out of the box without requiring external command-line
   music_client.download(song_infos=song_infos)
   ```
 
+#### OpenGameArtMusicClient
+
+[OpenGameArt](https://opengameart.org/) is a community-driven platform that provides free and open-licensed game assets, including sprites, textures, music, and sound effects for game developers.
+
+You can use OpenGameArtMusicClient to download music from the platform mentioned above.
+
+OpenGameArtMusicClient does not require any additional CLI tools, such as ffmpeg or N_m3u8DL-RE. Simply install musicdl via pip, and it is ready to use out of the box.
+
+(1) Command-Line Usage
+
+- Basic usage for song search and download, without login cookies:
+
+  `musicdl -m OpenGameArtMusicClient`
+
+(2) Invoke It in Python
+
+- Basic usage for song search and download, without login cookies:
+
+  ```python
+  from musicdl import musicdl
+
+  music_client = musicdl.MusicClient(music_sources=['OpenGameArtMusicClient'])
+  music_client.startcmdui()
+  ```
+
 #### QobuzMusicClient (Built-in Premium Account)
 
 [Qobuz](https://play.qobuz.com/discover) is a high-resolution music streaming and download platform that offers more than 100 million tracks in CD-quality and Hi-Res audio for music listening and discovery.
@@ -2116,9 +2141,9 @@ To use TuneHubMusicClient, all you need is pip install musicdl. You don’t have
 
 [HEMusic](https://music.wjhe.top/) is an online music search and playback platform that allows users to search tracks, import playlists or albums, and access available music resources through a web-based interface.
 
-For music-related operations on the platform above, `WJHEMusicClient` provides a simple client implementation for interacting with HEMusic.
+For music-related operations on the platform above, WJHEMusicClient provides a simple client implementation for interacting with HEMusic.
 
-The table below lists the music sources currently supported by `WJHEMusicClient` through HEMusic:
+The table below lists the music sources currently supported by WJHEMusicClient through HEMusic:
 
 | Source (EN)             | Source (CN)                        | Official Websites                        | `allowed_music_sources`      |
 | -----------------       | -------------------                | -----------------------------------      | -------------------          |
@@ -2126,7 +2151,7 @@ The table below lists the music sources currently supported by `WJHEMusicClient`
 | JOOX                    | JOOX (QQ音乐海外版)                | https://www.joox.com                     | `joox`                       |
 | Migu                    | 咪咕音乐                           | https://music.migu.cn/v5/#/musicLibrary  | `migu`                       |
 
-`WJHEMusicClient` does not depend on external command-line tools such as `ffmpeg` or `N_m3u8DL-RE`. Once `musicdl` is installed, it is ready to use.
+WJHEMusicClient does not depend on external command-line tools such as ffmpeg or N_m3u8DL-RE. Once musicdl is installed, it is ready to use.
 
 (1) Command-Line Usage
 
