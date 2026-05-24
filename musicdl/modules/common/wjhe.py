@@ -55,7 +55,7 @@ class WJHEMusicClient(BaseMusicClient):
             task_id = progress.add_task(f"{self.source}._search >>> Start to process the 0th search result on page {page_no}", total=None, completed=0)
             for search_result_idx, search_result in enumerate(resp2json(resp)['data']['data']):
                 # --update progress
-                progress.update(task_id, description=f'{self.source}._search >>> Start to process the {search_result_idx+1}th search result on page {page_no}', completed=search_result_idx+1, total=search_result_idx+1)
+                progress.update(task_id, description=f'{self.source}.{root_source}._search >>> Start to process the {search_result_idx+1}th search result on page {page_no}', completed=search_result_idx+1, total=search_result_idx+1)
                 # --download results
                 if not isinstance(search_result, dict) or (not (song_id := search_result.get('ID'))) or (not search_result.get('fileLinks')): continue
                 search_result['source'], song_info = root_source, SongInfo(source=self.source, root_source=root_source), 
