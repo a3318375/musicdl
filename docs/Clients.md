@@ -2692,6 +2692,31 @@ There is no need to set up external command-line tools like ffmpeg or N_m3u8DL-R
   music_client.startcmdui()
   ```
 
+#### ITingWaMusicClient
+
+[itingwa.com](https://www.itingwa.com/) is a Chinese community-driven pure-music website where users can discover, stream, download, recommend, and discuss instrumental tracks, albums, and radio content.
+
+ITingWaMusicClient provides built-in support for downloading tracks from iTingWa.
+
+ITingWaMusicClient does not require external command-line tools such as ffmpeg or N_m3u8DL-RE. Simply install musicdl with pip, and you’re ready to go.
+
+(1) Command-Line Usage
+
+- Search for and Download Playable Music Files from Websites
+
+  `musicdl -m ITingWaMusicClient`
+
+(2) Invoke It in Python
+
+- Search for and Download Playable Music Files from Websites
+
+  ```python
+  from musicdl import musicdl
+
+  music_client = musicdl.MusicClient(music_sources=['ITingWaMusicClient'])
+  music_client.startcmdui()
+  ```
+
 #### KKWSMusicClient
 
 [kkws.cc](https://www.kkws.cc/) is a lossless music sharing website that provides free MP3 and high-quality music downloads, including trending songs and curated music collections.
