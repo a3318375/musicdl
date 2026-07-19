@@ -2763,6 +2763,35 @@ LivePOOMusicClient operates without reliance on supplementary CLI tools, includi
   music_client.startcmdui()
   ```
 
+#### LiziYYMusicClient
+
+[liziyy.top](https://liziyy.top/) is a free music search and sharing platform where users can discover songs, view lyrics, and access available MP3 and lossless audio resources.
+
+To retrieve music from the platform above, we can use LiziYYMusicClient.
+
+LiziYYMusicClient works without additional command-line tools such as FFmpeg or N_m3u8DL-RE; installing musicdl via pip is sufficient for out-of-the-box use.
+
+(1) Command-Line Usage
+
+- Configure Quark Drive Cookies to Search for and Download High-Quality Music Files
+
+  `musicdl -m LiziYYMusicClient -i "{'LiziYYMusicClient': {'quark_parser_config': {'cookies': 'Your Quark Drive Login Cookies'}}}"`
+
+(2) Invoke It in Python
+
+- Configure Quark Drive Cookies to Search for and Download High-Quality Music Files
+
+  ```python
+  from musicdl import musicdl
+  
+  your_quark_drive_login_cookies_with_str_or_dict_format = ''
+  init_music_clients_cfg = {
+    'LiziYYMusicClient': {'quark_parser_config': {'cookies': your_quark_drive_login_cookies_with_str_or_dict_format}},
+  }
+  music_client = musicdl.MusicClient(music_sources=['LiziYYMusicClient'], init_music_clients_cfg=init_music_clients_cfg)
+  music_client.startcmdui()
+  ```
+
 #### MituMusicClient
 
 [qqmp3.vip](https://www.qqmp3.vip/) is an online music player that offers free streaming and high-quality downloads in formats such as MP3, FLAC, and WAV.
