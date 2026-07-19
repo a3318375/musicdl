@@ -2834,6 +2834,48 @@ No extra setup. No external CLI tools. Just pip install musicdl and MituMusicCli
   music_client.startcmdui()
   ```
 
+#### MGMP3MusicClient
+
+[mgmp3.top](https://www.mgmp3.top/) is a music resource platform distinguished by its convenient search experience and flexible download options, including both packaged archives and individual MP3 links.
+
+Songs from the platform above can be downloaded using MGMP3MusicClient.
+
+No extra setup or external CLI tools are required; simply install musicdl via pip, and MGMP3MusicClient is ready to use.
+
+(1) Command-Line Usage
+
+- Search for and Download Playable Music Files from Websites
+
+  `musicdl -m MGMP3MusicClient`
+
+- Configure Quark Drive Cookies to Search for and Download Higher-Quality Music Files
+
+  `musicdl -m MGMP3MusicClient -i "{'MGMP3MusicClient': {'quark_parser_config': {'cookies': 'Your Quark Drive Login Cookies'}}}"`
+
+(2) Invoke It in Python
+
+- Search for and Download Playable Music Files from Websites
+
+  ```python
+  from musicdl import musicdl
+
+  music_client = musicdl.MusicClient(music_sources=['MGMP3MusicClient'])
+  music_client.startcmdui()
+  ```
+
+- Configure Quark Drive Cookies to Search for and Download Higher-Quality Music Files
+
+  ```python
+  from musicdl import musicdl
+  
+  your_quark_drive_login_cookies_with_str_or_dict_format = ''
+  init_music_clients_cfg = {
+    'MGMP3MusicClient': {'quark_parser_config': {'cookies': your_quark_drive_login_cookies_with_str_or_dict_format}},
+  }
+  music_client = musicdl.MusicClient(music_sources=['MGMP3MusicClient'], init_music_clients_cfg=init_music_clients_cfg)
+  music_client.startcmdui()
+  ```
+
 #### TwoT58MusicClient
 
 [2t58.com](https://www.2t58.com/) is a music portal featuring charts, artists, playlists, albums, radio, MV content, and free MP3 downloads.
