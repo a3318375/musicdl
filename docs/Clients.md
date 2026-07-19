@@ -2901,6 +2901,48 @@ No extra setup or external CLI tools are required; simply install musicdl via pi
   music_client.startcmdui()
   ```
 
+#### SgogoMusicClient
+
+[sgogo.com](https://www.sgogo.com/) is a streamlined music discovery platform offering fast song and artist search, online previews, lyrics, detailed track information, and curated music resources in one place.
+
+SgogoMusicClient enables direct downloading of songs available on the platform above.
+
+Getting started is straightforward: install musicdl with pip, and SgogoMusicClient works immediately without any additional configuration or third-party command-line tools.
+
+(1) Command-Line Usage
+
+- Search for and Download Playable Music Files from Websites
+
+  `musicdl -m SgogoMusicClient`
+
+- Configure Quark Drive Cookies to Search for and Download Higher-Quality Music Files
+
+  `musicdl -m SgogoMusicClient -i "{'SgogoMusicClient': {'quark_parser_config': {'cookies': 'Your Quark Drive Login Cookies'}}}"`
+
+(2) Invoke It in Python
+
+- Search for and Download Playable Music Files from Websites
+
+  ```python
+  from musicdl import musicdl
+
+  music_client = musicdl.MusicClient(music_sources=['SgogoMusicClient'])
+  music_client.startcmdui()
+  ```
+
+- Configure Quark Drive Cookies to Search for and Download Higher-Quality Music Files
+
+  ```python
+  from musicdl import musicdl
+  
+  your_quark_drive_login_cookies_with_str_or_dict_format = ''
+  init_music_clients_cfg = {
+    'SgogoMusicClient': {'quark_parser_config': {'cookies': your_quark_drive_login_cookies_with_str_or_dict_format}},
+  }
+  music_client = musicdl.MusicClient(music_sources=['SgogoMusicClient'], init_music_clients_cfg=init_music_clients_cfg)
+  music_client.startcmdui()
+  ```
+
 #### TwoT58MusicClient
 
 [2t58.com](https://www.2t58.com/) is a music portal featuring charts, artists, playlists, albums, radio, MV content, and free MP3 downloads.
