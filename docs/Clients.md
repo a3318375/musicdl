@@ -2987,6 +2987,35 @@ TwoT58MusicClient is designed for hassle-free use: no additional CLI tools like 
   music_client.startcmdui()
   ```
 
+#### XiagebaMusicClient
+
+[xiageba.liumingye.cn](https://xiageba.liumingye.cn/) is a music aggregation platform for searching, streaming, and finding high-quality MP3 and lossless FLAC tracks shared across the web.
+
+Music from the platform mentioned above can be accessed using XiagebaMusicClient.
+
+XiagebaMusicClient does not rely on external command-line utilities such as FFmpeg or N_m3u8DL-RE. After installing musicdl with pip, it can be used directly without any additional setup.
+
+(1) Command-Line Usage
+
+- Configure Quark Drive Cookies to Search for and Download High-Quality Music Files
+
+  `musicdl -m XiagebaMusicClient -i "{'XiagebaMusicClient': {'quark_parser_config': {'cookies': 'Your Quark Drive Login Cookies'}}}"`
+
+(2) Invoke It in Python
+
+- Configure Quark Drive Cookies to Search for and Download High-Quality Music Files
+
+  ```python
+  from musicdl import musicdl
+  
+  your_quark_drive_login_cookies_with_str_or_dict_format = ''
+  init_music_clients_cfg = {
+    'XiagebaMusicClient': {'quark_parser_config': {'cookies': your_quark_drive_login_cookies_with_str_or_dict_format}},
+  }
+  music_client = musicdl.MusicClient(music_sources=['XiagebaMusicClient'], init_music_clients_cfg=init_music_clients_cfg)
+  music_client.startcmdui()
+  ```
+
 #### YinyuedaoMusicClient
 
 [1mp3.top](https://1mp3.top/) is a music download website that provides free MP3 and lossless tracks, searchable song pages, and bundled music collections.
