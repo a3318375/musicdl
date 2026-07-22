@@ -165,7 +165,7 @@ def search_stream(keyword, sources):
             for i, url in enumerate(search_urls):
                 t = threading.Thread(
                     target=_safe_search,
-                    args=(client, keyword, url, buckets[i], progress),
+                    args=(client, keyword, url, buckets[i], progress, source, emit),
                     daemon=True,
                 )
                 t.start()
@@ -215,12 +215,12 @@ def search_stream(keyword, sources):
     yield f'event: done\ndata: {{"count": {total}}}\n\n'
 
 
-def _safe_search(client, keyword, url, bucket, progress):
+def _safe_search(client, keyword, url, bucket, progress, source, emit):
     try:
         client._search(keyword=keyword, search_url=url, request_overrides={},
-                        song_infos=bucket, progress=progress, progress_id=0)
-    except Exception:
-        pass
+                        song_infos=bucket, progress=progress)
+    except Exception as err:
+        emit('source_error', {'source': source, 'message': str(err)})
 
 
 def _drain(buckets, cursors, source, seen, lock, emit):
