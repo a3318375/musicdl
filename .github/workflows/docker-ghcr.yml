@@ -11,9 +11,10 @@ on:
       - requirements-optional.txt
       - setup.py
       - MANIFEST.in
-      - README.md
       - musicdl/**
       - examples/claudeai-modern-web-music-player/**
+      - '!examples/claudeai-modern-web-music-player/README.md'
+      - '!examples/claudeai-modern-web-music-player/README.zh-CN.md'
       - .github/workflows/docker-ghcr.yml
   workflow_dispatch:
 
