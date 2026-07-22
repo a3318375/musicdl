@@ -540,6 +540,7 @@ def api_file(download_id):
 
 
 if __name__ == '__main__':
+    host = os.environ.get('HOST', '127.0.0.1')
     port = int(os.environ.get('PORT', 5000))
-    print(f'\n  🎵  Music player running at  http://127.0.0.1:{port}\n')
-    app.run(host='127.0.0.1', port=port, threaded=True, debug=False)
+    print(f'\n  🎵  Music player running at  http://{host}:{port}\n')
+    app.run(host=host, port=port, threaded=True, debug=False)
