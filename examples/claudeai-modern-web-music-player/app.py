@@ -31,7 +31,9 @@ from musicdl import musicdl
 HERE = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(HERE, 'static')
 DOWNLOAD_DIR = os.path.join(HERE, 'downloads')
+CONFIG_DIR = os.path.join(HERE, 'config')
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+os.makedirs(CONFIG_DIR, exist_ok=True)
 
 # All sources we expose. Only Migu is enabled by default (per requirement);
 # the others are one toggle away in the UI.
@@ -60,8 +62,16 @@ class ClientManager:
         self._mc = None
 
     def _build(self):
-        cfg = {s: {'search_size_per_source': SEARCH_SIZE_PER_SOURCE, 'disable_print': True}
-               for s in SUPPORTED_SOURCES}
+        cfg = {}
+        for source in SUPPORTED_SOURCES:
+            cfg[source] = {'search_size_per_source': SEARCH_SIZE_PER_SOURCE, 'disable_print': True}
+            cookie = load_cookie(source)
+            if cookie:
+                cfg[source].update({
+                    'default_search_cookies': cookie,
+                    'default_download_cookies': cookie,
+                    'default_parse_cookies': cookie,
+                })
         return musicdl.MusicClient(music_sources=list(SUPPORTED_SOURCES.keys()),
                                    init_music_clients_cfg=cfg)
 
@@ -71,8 +81,36 @@ class ClientManager:
                 self._mc = self._build()
         return self._mc.music_clients[source]
 
+    def reset(self):
+        with self._lock:
+            self._mc = None
+
 
 MANAGER = ClientManager()
+
+
+def cookie_path(source):
+    if source not in SUPPORTED_SOURCES:
+        raise ValueError('unsupported source')
+    return os.path.join(CONFIG_DIR, f'{source}.cookie')
+
+
+def load_cookie(source):
+    path = cookie_path(source)
+    if not os.path.exists(path):
+        return ''
+    with open(path, 'r', encoding='utf-8') as fp:
+        return fp.read().strip()
+
+
+def save_cookie(source, cookie):
+    path = cookie_path(source)
+    cookie = (cookie or '').strip()
+    if cookie:
+        with open(path, 'w', encoding='utf-8') as fp:
+            fp.write(cookie)
+    elif os.path.exists(path):
+        os.remove(path)
 
 
 # ---------------------------------------------------------------------------
@@ -341,6 +379,31 @@ def api_sources():
          'short': SUPPORTED_SOURCES[sid]['short'], 'default': SUPPORTED_SOURCES[sid]['default']}
         for sid in SOURCE_ORDER
     ])
+
+
+@app.route('/api/cookies', methods=['GET', 'POST'])
+def api_cookies():
+    if request.method == 'GET':
+        return jsonify({
+            sid: {
+                'label': SUPPORTED_SOURCES[sid]['label'],
+                'short': SUPPORTED_SOURCES[sid]['short'],
+                'cookie': load_cookie(sid),
+                'configured': bool(load_cookie(sid)),
+            }
+            for sid in SOURCE_ORDER
+        })
+
+    data = request.get_json(force=True, silent=True) or {}
+    source = data.get('source')
+    if source not in SUPPORTED_SOURCES:
+        return jsonify({'error': '不支持的音乐源'}), 400
+    try:
+        save_cookie(source, data.get('cookie') or '')
+        MANAGER.reset()
+    except Exception as err:
+        return jsonify({'error': str(err)}), 500
+    return jsonify({'ok': True, 'configured': bool(load_cookie(source))})
 
 
 @app.route('/api/search')

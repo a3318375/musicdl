@@ -342,7 +342,11 @@ $('#lyricsToggle').onclick = () => {
   const p = $('#lyricsPanel');
   p.classList.toggle('open');
   $('#lyricsToggle').classList.toggle('on', p.classList.contains('open'));
-  if (p.classList.contains('open')) $('#dlDrawer').classList.remove('open');
+  if (p.classList.contains('open')) {
+    $('#dlDrawer').classList.remove('open');
+    $('#settingsDrawer').classList.remove('open');
+    $('#settingsTopBtn').classList.remove('on');
+  }
 };
 $('#lyricsClose').onclick = () => { $('#lyricsPanel').classList.remove('open'); $('#lyricsToggle').classList.remove('on'); };
 
@@ -353,7 +357,13 @@ let dlCount = 0;
 const fab = document.createElement('button');
 fab.className = 'dl-fab'; fab.title = '下载列表';
 fab.innerHTML = `${ICON_DL}<span class="badge">0</span>`;
-fab.onclick = () => { $('#dlDrawer').classList.toggle('open'); $('#lyricsPanel').classList.remove('open'); };
+fab.onclick = () => {
+  $('#dlDrawer').classList.toggle('open');
+  $('#lyricsPanel').classList.remove('open');
+  $('#settingsDrawer').classList.remove('open');
+  $('#lyricsToggle').classList.remove('on');
+  $('#settingsTopBtn').classList.remove('on');
+};
 document.body.appendChild(fab);
 $('#dlClose').onclick = () => $('#dlDrawer').classList.remove('open');
 
@@ -423,6 +433,68 @@ function trackDownload(id, item, btn) {
 function mb(b) { return (b / 1048576).toFixed(1) + 'MB'; }
 
 /* ------------------------------------------------------------------ */
+/* settings / cookies                                                  */
+/* ------------------------------------------------------------------ */
+$('#settingsTopBtn').onclick = () => {
+  $('#settingsDrawer').classList.toggle('open');
+  $('#settingsTopBtn').classList.toggle('on', $('#settingsDrawer').classList.contains('open'));
+  $('#dlDrawer').classList.remove('open');
+  $('#lyricsPanel').classList.remove('open');
+  $('#lyricsToggle').classList.remove('on');
+  if ($('#settingsDrawer').classList.contains('open')) loadCookieSettings();
+};
+$('#settingsClose').onclick = () => {
+  $('#settingsDrawer').classList.remove('open');
+  $('#settingsTopBtn').classList.remove('on');
+};
+
+let cookieSettings = {};
+
+async function loadCookieSettings() {
+  try {
+    cookieSettings = await fetch('/api/cookies').then(r => r.json());
+    const select = $('#cookieSource');
+    if (!select.children.length) {
+      select.innerHTML = sources.map(s => `<option value="${s.id}">${esc(s.label)}</option>`).join('');
+      const qq = sources.find(s => s.id === 'QQMusicClient');
+      if (qq) select.value = qq.id;
+    }
+    syncCookieEditor();
+  } catch {
+    toast('读取 Cookie 设置失败');
+  }
+}
+
+function syncCookieEditor() {
+  const source = $('#cookieSource').value;
+  const item = cookieSettings[source] || {};
+  $('#cookieInput').value = item.cookie || '';
+  const state = $('#cookieState');
+  state.classList.toggle('ok', !!item.configured);
+  state.textContent = item.configured ? `${item.short || source} 已配置` : `${item.short || source} 未配置`;
+}
+
+$('#cookieSource').onchange = syncCookieEditor;
+$('#cookieSave').onclick = async () => {
+  const source = $('#cookieSource').value;
+  try {
+    const res = await fetch('/api/cookies', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ source, cookie: $('#cookieInput').value })
+    }).then(r => r.json());
+    if (res.error) { toast(res.error); return; }
+    await loadCookieSettings();
+    toast(res.configured ? 'Cookie 已保存' : 'Cookie 已清空');
+  } catch {
+    toast('保存 Cookie 失败');
+  }
+};
+$('#cookieClear').onclick = () => {
+  $('#cookieInput').value = '';
+  $('#cookieSave').click();
+};
+
+/* ------------------------------------------------------------------ */
 /* misc                                                                */
 /* ------------------------------------------------------------------ */
 let toastTimer = null;
@@ -431,10 +503,10 @@ function toast(msg) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
 }
 document.addEventListener('keydown', (e) => {
-  if (e.target.tagName === 'INPUT') return;
+  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
   if (e.code === 'Space') { e.preventDefault(); $('#playBtn').click(); }
   if (e.code === 'ArrowRight' && e.altKey) step(1);
   if (e.code === 'ArrowLeft' && e.altKey) step(-1);
 });
 
-loadSources();
+loadSources().then(loadCookieSettings);

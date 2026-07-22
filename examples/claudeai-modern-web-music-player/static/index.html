@@ -28,6 +28,9 @@
     <input id="searchInput" type="text" placeholder="搜索歌曲、艺人…" spellcheck="false">
     <button type="submit" id="searchBtn">搜索</button>
   </form>
+  <button class="settings-top-btn" id="settingsTopBtn" title="设置" aria-label="设置">
+    <svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.05.05a2 2 0 0 1-2.83 2.83l-.05-.05a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 0 1-4 0v-.07a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.05.05a2 2 0 1 1-2.83-2.83l.05-.05A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 0 1 0-4h.04A1.7 1.7 0 0 0 4.6 8a1.7 1.7 0 0 0-.34-1.88l-.05-.05a2 2 0 1 1 2.83-2.83l.05.05A1.7 1.7 0 0 0 8.97 3.6 1.7 1.7 0 0 0 10 2.04V2a2 2 0 0 1 4 0v.04a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.05-.05a2 2 0 1 1 2.83 2.83l-.05.05A1.7 1.7 0 0 0 19.4 8c.13.4.46.74.87.9.2.08.42.1.63.1H21a2 2 0 0 1 0 4h-.1c-.64 0-1.21.39-1.5 1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+  </button>
 </header>
 
 <div class="sourcebar">
@@ -73,6 +76,29 @@
     <button id="dlClose" aria-label="关闭下载面板">✕</button>
   </div>
   <ul class="dl-list" id="dlList"></ul>
+</aside>
+
+<!-- Settings drawer -->
+<aside class="settings-drawer" id="settingsDrawer">
+  <div class="settings-head">
+    <span>设置</span>
+    <button id="settingsClose" aria-label="关闭设置">✕</button>
+  </div>
+  <div class="settings-body">
+    <label class="settings-field">
+      <span>音乐源</span>
+      <select id="cookieSource"></select>
+    </label>
+    <label class="settings-field">
+      <span>Cookie</span>
+      <textarea id="cookieInput" spellcheck="false" placeholder="粘贴从浏览器复制的 cookie"></textarea>
+    </label>
+    <div class="cookie-state" id="cookieState">未配置</div>
+    <div class="settings-actions">
+      <button type="button" id="cookieClear">清空</button>
+      <button type="button" id="cookieSave">保存</button>
+    </div>
+  </div>
 </aside>
 
 <!-- Now playing bar -->
